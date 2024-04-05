@@ -18,10 +18,10 @@ def do_pack():
     local("mkdir -p versions")
     result = local("tar -cvzf {} web_static".format(archive_path))
 
-    if result.succes:
-        print("web_static packed: {}".format(archive_path))
-        return archive_path
-    return None
+    if result.failed:
+        return None
+    print("web_static packed: {}".format(archive_path))
+    return archive_path
 
 
 def do_deploy(archive_path):
