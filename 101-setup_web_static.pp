@@ -1,57 +1,91 @@
-# Define variables in Puppet
-$directory_name = '/data'
-$web_static = "${directory_name}/web_static"
-$releases = "${web_static}/releases"
-$shared = "${web_static}/shared"
-$test = "${releases}/test"
-$fake_file = "${test}/index.html"
-$link_name = "${web_static}/current"
-$target_folder = $test
-$nginx_conf = '/etc/nginx/sites-available/default'
-$hbnb_static_config = "\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}"
+# Configures a web server for deployment of web_static.
 
-# Ensure Nginx is installed and running
+# Nginx configuration file
+$nginx_conf = "server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By ${hostname};
+    root   /var/www/html;
+    index  index.html index.htm;
+
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index index.html index.htm;
+    }
+
+    location /redirect_me {
+        return 301 http://youtube.com/;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}"
+
 package { 'nginx':
-  ensure => installed,
-  before => File[$nginx_conf],
+  ensure   => 'present',
+  provider => 'apt'
+} ->
+
+file { '/data':
+  ensure  => 'directory'
+} ->
+
+file { '/data/web_static':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/releases':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/releases/test':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/shared':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/releases/test/index.html':
+  ensure  => 'present',
+  content => "Heloo fake\n"
+} ->
+
+file { '/data/web_static/current':
+  ensure => 'link',
+  target => '/data/web_static/releases/test'
+} ->
+
+exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/'
 }
 
-service { 'nginx':
-  ensure    => running,
-  enable    => true,
-  subscribe => File[$nginx_conf],
-}
+file { '/var/www':
+  ensure => 'directory'
+} ->
 
-# Create required directories
-File {
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
-}
+file { '/var/www/html':
+  ensure => 'directory'
+} ->
 
-file { [$directory_name, $web_static, $releases, $shared, $test]:
-  ensure => directory,
-  mode   => '0755',
-}
+file { '/var/www/html/index.html':
+  ensure  => 'present',
+  content => "Holberton World!\n"
+} ->
 
-# Create a fake index.html file
-file { $fake_file:
-  ensure  => file,
-  content => 'Hello World',
-  mode    => '0644',
-}
+file { '/var/www/html/404.html':
+  ensure  => 'present',
+  content => "Ceci n'est pas une page\n"
+} ->
 
-# Ensure the symbolic link exists
-file { $link_name:
-  ensure => link,
-  target => $target_folder,
-  require => File[$fake_file],
-}
+file { '/etc/nginx/sites-available/default':
+  ensure  => 'present',
+  content => $nginx_conf
+} ->
 
-# Backup the original Nginx config and update it
-file { $nginx_conf:
-  ensure  => file,
-  content => template('path/to/your/template.erb'),
-  backup  => '.backup.%F-%H-%M-%S',
-  notify  => Service['nginx'],
+exec { 'nginx restart':
+  path => '/etc/init.d/'
 }
