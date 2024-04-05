@@ -9,6 +9,7 @@ from datetime import datetime
 
 env.hosts = ['ubuntu@34.204.81.253', 'ubuntu@52.87.154.218']
 
+
 def do_clean(number=0):
     """Delete out-of-date archives"""
     number = 1 if int(number) == 0 else int(number)
