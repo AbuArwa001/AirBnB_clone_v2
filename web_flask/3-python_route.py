@@ -25,7 +25,7 @@ def text(text):
     return f"C {text.replace('_', ' ')}"
 
 
-@app.route('/pthon/<text>', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
 def python(text='is cool'):
     """returns TEXT WITH Python concatnated"""
     return f"Python {text.replace('_', ' ')}"
