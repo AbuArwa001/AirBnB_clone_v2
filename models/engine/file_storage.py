@@ -58,3 +58,6 @@ class FileStorage:
         if obj:
             obj_key = obj.to_dict()['__class__'] + '.' + obj.id
             self.all().pop(obj_key, None)
+
+    def close(self):
+        self.reload()
