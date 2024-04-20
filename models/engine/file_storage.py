@@ -60,4 +60,5 @@ class FileStorage:
             self.all().pop(obj_key, None)
 
     def close(self):
+        """Updates  __objects to file storage"""
         self.reload()

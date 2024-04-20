@@ -27,6 +27,8 @@ place_amenity = Table(
         primary_key=True,
         nullable=False
     ),
+    mysql_charset='latin1',  # Set the desired charset
+    mysql_engine='InnoDB'    # Set the desired storage engine
 )
 
 
@@ -34,6 +36,10 @@ class Place(BaseModel, Base):
     """The Place class, contains infor about a BnBs"""
 
     __tablename__ = "places"
+    __table_args__ = {
+        'mysql_charset': 'latin1',
+        'mysql_engine': 'InnoDB'
+    }
 
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)

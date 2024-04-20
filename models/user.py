@@ -9,6 +9,10 @@ class User(BaseModel, Base):
     """This class defines a user by various attributes infor"""
 
     __tablename__ = "users"
+    __table_args__ = {
+        'mysql_charset': 'latin1',
+        'mysql_engine': 'InnoDB'
+    }
 
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)

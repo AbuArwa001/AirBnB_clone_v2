@@ -8,6 +8,10 @@ class Review(BaseModel, Base):
     """Review classto store review information"""
 
     __tablename__ = "reviews"
+    __table_args__ = {
+        'mysql_charset': 'latin1',
+        'mysql_engine': 'InnoDB'
+    }
 
     text = Column(String(1024), nullable=False)
     place_id = Column(String(60), ForeignKey("places.id"), nullable=False)

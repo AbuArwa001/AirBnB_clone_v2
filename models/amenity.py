@@ -8,7 +8,10 @@ from models.place import place_amenity
 
 class Amenity(BaseModel, Base):
     __tablename__ = "amenities"
-
+    __table_args__ = {
+        'mysql_charset': 'latin1',
+        'mysql_engine': 'InnoDB'
+    }
     name = Column(String(128), nullable=False)
     place_amenities = relationship(
         "Place",
