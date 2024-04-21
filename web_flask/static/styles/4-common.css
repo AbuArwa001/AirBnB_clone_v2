@@ -1,0 +1,40 @@
+/*
+  ========================================
+  Box Sizing
+  ========================================
+*/
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/*
+  ========================================
+  Body Styles
+  ========================================
+*/
+body {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: #484848;
+    font-size: 14px;
+    font-family: Circular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/*
+  ========================================
+  Container Styles
+  ========================================
+*/
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
