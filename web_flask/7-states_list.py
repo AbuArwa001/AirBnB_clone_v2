@@ -1,19 +1,17 @@
 #!/usr/bin/python3
 """
-starts a Flask web application
+Script that starts a Flask web application
 """
-
 from flask import Flask, render_template
 from models import storage
-import operator
+
+
 app = Flask(__name__)
 
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """display a HTML page with the states listed in alphabetical order"""
-    
-    states = storage.all("State")
+    states = storage.all('State')
     return render_template('7-states_list.html', states=states)
 
 
