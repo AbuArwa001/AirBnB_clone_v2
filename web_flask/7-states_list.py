@@ -1,25 +1,28 @@
 #!/usr/bin/python3
 """
-starts a Flask web application
+Script that starts a Flask web application
 """
-
 from flask import Flask, render_template
-from models import *
 from models import storage
+from operator import itemgetter
+
+
 app = Flask(__name__)
 
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """display a HTML page with the states listed in alphabetical order"""
-    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    """routes to state list."""
+    states_dict = storage.all('State')
+    states = sorted(states_dict.values(), key=itemgetter('name'))
     return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
 def teardown_db(exception):
-    """closes the storage on teardown"""
+    """Remove the current SQLAlchemy Session after each request."""
     storage.close()
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
