@@ -4,6 +4,7 @@ starts a Flask web application
 """
 
 from flask import Flask, render_template
+from models import *
 from models import storage
 import operator
 app = Flask(__name__)
