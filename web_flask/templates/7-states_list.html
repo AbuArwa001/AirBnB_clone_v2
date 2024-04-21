@@ -6,7 +6,7 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% for _ , val in sorted(states.items(), key=lambda x: x[1].name) %}
+            {% for _ , val in states.items() %}
             <LI>{{val.id}}: <B>{{val.name}}</B></LI>
             {% endfor %}
         </UL>
