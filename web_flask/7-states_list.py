@@ -4,6 +4,7 @@ Script that starts a Flask web application
 """
 from flask import Flask, render_template
 from models import storage
+from operator import itemgetter
 
 
 app = Flask(__name__)
@@ -13,7 +14,7 @@ app = Flask(__name__)
 def states_list():
 
     states_dict = storage.all('State')
-    states = sorted(states_dict.values(), key=lambda x: x.name)
+    states = sorted(states_dict.values(), key=itemgetter('name'))
     return render_template('7-states_list.html', states=states)
 
 
